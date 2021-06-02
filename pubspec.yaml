@@ -30,7 +30,7 @@ dependencies:
   # Web View
   webview_flutter: ^1.0.7
   # Svg Icons
-  flutter_svg: ^0.18.0
+  flutter_svg: ^0.20.0-nullsafety.3
   # auto direction
   auto_direction: ^0.0.4+1
   # animated splash screen

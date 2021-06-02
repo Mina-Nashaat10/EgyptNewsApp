@@ -17,8 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   NewsModel newsModel = NewsModel();
-  List<CategoryModel> categories = new List<CategoryModel>();
-  List<NewsModel> topNews = new List<NewsModel>();
+  List<CategoryModel> categories = [];
+  List<NewsModel> topNews = [];
   bool isRTL = false;
   @override
   void initState() {

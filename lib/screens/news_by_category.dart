@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newsapp/helpers/appbar.dart';
 import 'package:newsapp/models/news_model.dart';
 
 class NewsByCategory extends StatefulWidget {
@@ -35,28 +36,7 @@ class _NewsByCategoryState extends State<NewsByCategory> {
           Widget widget;
           if (snapshot.hasData) {
             widget = Scaffold(
-              appBar: AppBar(
-                iconTheme: IconThemeData(color: Colors.red),
-                backgroundColor: Colors.white,
-                elevation: 0.0,
-                title: Padding(
-                  padding: EdgeInsets.only(right: 40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Egypt",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "News",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-                centerTitle: true,
-              ),
+              appBar: appBar(context),
               drawer: Theme(
                 data: Theme.of(context).copyWith(canvasColor: Colors.white),
                 child: Drawer(
@@ -120,6 +100,7 @@ class _NewsByCategoryState extends State<NewsByCategory> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
+                        margin: EdgeInsets.only(top: 5, bottom: 5),
                         color: Colors.red,
                         alignment: Alignment.centerRight,
                         width: category == "Entertainment" ||
@@ -152,7 +133,8 @@ class _NewsByCategoryState extends State<NewsByCategory> {
                                 arguments: newsCategory[index].newUrl);
                           },
                           child: Container(
-                            margin: EdgeInsets.only(top: 15, right: 7, left: 7),
+                            margin: EdgeInsets.only(
+                                bottom: 15, right: 10, left: 10),
                             child: newsCategory[index].urlToImage == null
                                 ? SizedBox()
                                 : Stack(
@@ -221,27 +203,7 @@ class _NewsByCategoryState extends State<NewsByCategory> {
             );
           } else {
             widget = Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0.0,
-                title: Padding(
-                  padding: EdgeInsets.only(right: 40),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Egypt",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "News",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-                centerTitle: true,
-              ),
+              appBar: appBar(context),
               body: Center(
                 child: CircularProgressIndicator(),
               ),

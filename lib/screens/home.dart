@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newsapp/helpers/appbar.dart';
 import 'package:newsapp/helpers/data.dart';
 import 'package:newsapp/models/category_model.dart';
 import 'package:newsapp/models/news_model.dart';
-import 'dart:math' as math;
 
 class Home extends StatefulWidget {
   @override
@@ -47,27 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         Widget widget;
         if (snapshot.hasData) {
           widget = Scaffold(
-            appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.red),
-              backgroundColor: Colors.white,
-              title: Padding(
-                padding: EdgeInsets.only(right: 50.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Egypt",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    Text(
-                      "News",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ],
-                ),
-              ),
-              centerTitle: true,
-            ),
+            appBar: appBar(context),
             drawer: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.white),
               child: Drawer(
@@ -127,8 +107,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             body: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 5),
-                  height: 80,
+                  height: (MediaQuery.of(context).size.height) * (1.2 / 10),
+                  margin: EdgeInsets.only(left: 5, top: 5, bottom: 8),
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -145,75 +125,81 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/new_view",
-                              arguments: topNews[index].newUrl);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(top: 15, right: 7, left: 7),
-                          child: topNews[index].urlToImage == null
-                              ? SizedBox()
-                              : Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 250,
-                                      decoration: new BoxDecoration(
-                                        boxShadow: [
-                                          new BoxShadow(
-                                            color: Colors.black45,
-                                            blurRadius: 10.0,
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
-                                        child: CachedNetworkImage(
-                                          imageUrl: topNews[index].urlToImage,
-                                          width: double.infinity,
-                                          height: 250,
-                                          fit: BoxFit.fill,
-                                          placeholder: (context, url) => Center(
-                                            child: CircularProgressIndicator(),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/new_view",
+                                arguments: topNews[index].newUrl);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                bottom: 15, right: 10, left: 10),
+                            child: topNews[index].urlToImage == null
+                                ? SizedBox()
+                                : Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 250,
+                                        decoration: new BoxDecoration(
+                                          boxShadow: [
+                                            new BoxShadow(
+                                              color: Colors.black45,
+                                              blurRadius: 10.0,
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15)),
+                                          child: CachedNetworkImage(
+                                            imageUrl: topNews[index].urlToImage,
+                                            width: double.infinity,
+                                            height: 250,
+                                            fit: BoxFit.fill,
+                                            placeholder: (context, url) =>
+                                                Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                          width: double.infinity,
-                                          color: Colors.black12,
-                                          child: AutoDirection(
-                                            text: topNews[index].title,
-                                            onDirectionChange: (isRTL) {
-                                              this.isRTL = isRTL;
-                                            },
-                                            child: Text(
-                                              topNews[index].title,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w900,
-                                                fontFamily: "OpenSans",
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: double.infinity,
+                                            color: Colors.black12,
+                                            child: AutoDirection(
+                                              text: topNews[index].title,
+                                              onDirectionChange: (isRTL) {
+                                                this.isRTL = isRTL;
+                                              },
+                                              child: Text(
+                                                topNews[index].title,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w900,
+                                                  fontFamily: "OpenSans",
+                                                ),
                                               ),
-                                            ),
-                                          )),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      );
-                    },
-                    itemCount: snapshot.data.length,
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    ),
                   ),
                 ),
               ],
@@ -221,27 +207,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           );
         } else
           widget = Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              title: Padding(
-                padding: EdgeInsets.only(right: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Egypt",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    Text(
-                      "News",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ],
-                ),
-              ),
-              centerTitle: true,
-            ),
+            appBar: appBar(context),
             body: Center(
               child: CircularProgressIndicator(),
             ),
@@ -271,29 +237,29 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   Widget categoryItem(String name, String url) {
     return Container(
-      margin: EdgeInsets.only(right: 16),
+      margin: EdgeInsets.only(right: 10),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: Image.network(
               url,
-              width: 120,
-              height: 80,
+              width: 140,
+              height: (MediaQuery.of(context).size.height) * (1.1 / 9),
               fit: BoxFit.cover,
             ),
           ),
           Container(
             alignment: Alignment.center,
-            width: 120,
-            height: 80,
+            width: 140,
+            height: (MediaQuery.of(context).size.height) * (1.1 / 9),
             color: Colors.black26,
             child: Text(
               name,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 19,
                 color: Colors.white,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ),

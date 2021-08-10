@@ -10,20 +10,22 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedSplashScreen(
-        backgroundColor: Colors.lightBlueAccent,
-        splash: SizedBox(
-          width: 300,
-          height: 400,
-          child: Image.asset(
-            "assets/images/splash_screen.png",
-            fit: BoxFit.fill,
+    return SafeArea(
+      child: Scaffold(
+        body: AnimatedSplashScreen(
+          backgroundColor: Colors.lightBlueAccent,
+          splash: SizedBox(
+            width: 300,
+            height: 400,
+            child: Image.asset(
+              "assets/images/splash_screen.png",
+              fit: BoxFit.fill,
+            ),
           ),
+          nextScreen: Home(),
+          splashTransition: SplashTransition.slideTransition,
+          duration: 3000,
         ),
-        nextScreen: Home(),
-        splashTransition: SplashTransition.slideTransition,
-        duration: 3000,
       ),
     );
   }

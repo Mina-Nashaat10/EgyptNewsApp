@@ -1,7 +1,7 @@
 import 'package:newsapp/models/category_model.dart';
 
 List<CategoryModel> getCategories() {
-  List<CategoryModel> myCategories = List<CategoryModel>();
+  List<CategoryModel> myCategories = [];
   CategoryModel categoryModel;
 
   //1
@@ -46,7 +46,7 @@ List<CategoryModel> getCategories() {
       "https://images.unsplash.com/photo-1495563923587-bdc4282494d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80";
   myCategories.add(categoryModel);
 
-  //5
+  //6
   categoryModel = new CategoryModel();
   categoryModel.categoryName = "Technology";
   categoryModel.imageUrl =

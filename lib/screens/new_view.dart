@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newsapp/helper_widgets/loading_widget.dart';
+import 'package:newsapp/helper_widgets/no_internet_widget.dart';
+import 'package:newsapp/services/internet_connection.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewView extends StatefulWidget {
@@ -12,6 +16,20 @@ class NewView extends StatefulWidget {
 class _NewViewState extends State<NewView> {
   Completer<WebViewController> completer = Completer<WebViewController>();
   bool pageIsLoaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    connectivitySubscription =
+        connectivity.onConnectivityChanged.listen(updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    connectivitySubscription.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +43,11 @@ class _NewViewState extends State<NewView> {
             children: [
               DrawerHeader(
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/news_header.jpg"),
-                        fit: BoxFit.cover)),
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/news_header.jpg"),
+                      fit: BoxFit.cover),
+                ),
+                child: null,
               ),
               ListTile(
                 leading: SvgPicture.asset(
@@ -97,27 +117,44 @@ class _NewViewState extends State<NewView> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            WebView(
-              initialUrl: newUrl,
-              onWebViewCreated: ((WebViewController web) {
-                completer.complete(web);
-              }),
-              onPageFinished: (_) {
-                setState(() {
-                  pageIsLoaded = true;
-                });
-              },
-            ),
-            pageIsLoaded == false
-                ? Center(child: CircularProgressIndicator())
-                : SizedBox(),
-          ],
-        ),
+      body: FutureBuilder(
+        builder: (context, snapshot) {
+          Widget widget;
+          if (snapshot.hasData) {
+            if (snapshot.data == true) {
+              widget = Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Stack(
+                  children: [
+                    WebView(
+                      initialUrl: newUrl,
+                      onWebViewCreated: ((WebViewController web) {
+                        if (!completer.isCompleted) {
+                          completer.complete(web);
+                        }
+                      }),
+                      onPageFinished: (_) {
+                        setState(() {
+                          pageIsLoaded = true;
+                        });
+                      },
+                    ),
+                    pageIsLoaded == false
+                        ? Center(child: CircularProgressIndicator())
+                        : SizedBox(),
+                  ],
+                ),
+              );
+            } else {
+              widget = NoInternetWidget(connectionStatus);
+            }
+          } else {
+            widget = LoadingWidget();
+          }
+          return widget;
+        },
+        future: InternetConnection.internetAvailable(connectivity),
       ),
     );
   }
@@ -139,4 +176,16 @@ class _NewViewState extends State<NewView> {
       },
     );
   }
+
+  // Internet Area
+  ConnectivityResult connectionStatus = ConnectivityResult.none;
+  StreamSubscription<ConnectivityResult> connectivitySubscription;
+  Connectivity connectivity = Connectivity();
+
+  Future<void> updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      connectionStatus = result;
+    });
+  }
+// end
 }

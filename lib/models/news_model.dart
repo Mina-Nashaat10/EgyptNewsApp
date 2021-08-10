@@ -54,7 +54,7 @@ class NewsModel {
   }
 
   Future<List<NewsModel>> getNewsByCategory(String category) async {
-    List<NewsModel> news = List();
+    List<NewsModel> news = [];
     NewsModel newModel;
     String url =
         "http://newsapi.org/v2/top-headlines?country=eg&category=$category&apiKey=f935d00de8c4491ea58fce7128db87fd";
